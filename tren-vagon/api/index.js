@@ -4,6 +4,7 @@ const app = express();
 
 app.post("/add-passenger", (req, res) => {
   let tren = req.body;
+  console.log(tren);
   const trenName = req.body.Tren.Ad;
   let RezervasyonYapilabilir = false;
   let YerlesimAyrinti = [];
@@ -29,7 +30,6 @@ app.post("/add-passenger", (req, res) => {
     YerlesimAyrinti.push(rezervasyon);
   } else {
     if (KisilerFarkliVagonlaraYerlestirilebilir == "true") {
-      let kalanKisiSayisi = 0;
       let toplamBosKoltukSayisi = 0;
       let toplam = 0;
       let toplamRezerveKisiSayisi = RezervasyonYapilacakKisiSayisi;
