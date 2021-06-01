@@ -43,6 +43,11 @@
               <span>
                 Yerleştirilen Yolcular = {{ getTren.YerlesimAyrinti }}
               </span>
+              <div v-if="tren.count > getToplamYolcu">
+                <span class="bg-warning">
+                  Yerleştirilemeyen Yolcular = {{ tren.count - getToplamYolcu }}
+                </span>
+              </div>
             </div>
           </b-alert>
           <b-form-input
@@ -85,6 +90,7 @@
         </div>
       </div>
     </div>
+    {{ getToplamYolcu }}
   </b-container>
 </template>
 
@@ -98,7 +104,7 @@ export default {
       tren: {
         name: null,
         vagon: null,
-        count: 0,
+        count: null,
         status: false
       },
       options: [
@@ -117,13 +123,12 @@ export default {
         this.tren.vagon !== null
       ) {
         this.showAlert = false;
-
-        if (this.getTren.RezervasyonYapilabilir === false) {
+        this.showAlert2 = false;
+        this.showAlert3 = false;
+        if (this.getTren.RezervasyonYapilabilir == false) {
           this.showAlert3 = true;
-          this.showAlert2 = false;
         } else {
           this.showAlert2 = true;
-          this.showAlert3 = false;
         }
 
         this.$store.dispatch("addPassenger", this.tren);
@@ -135,6 +140,17 @@ export default {
   computed: {
     getTren() {
       return this.$store.getters.getTren;
+    },
+    getToplamYolcu() {
+      let toplam = 0;
+      if (this.$store.getters.getTren.YerlesimAyrinti) {
+        let toplamYolcu = this.$store.getters.getTren.YerlesimAyrinti.forEach(
+          item => {
+            toplam += item.KisiSayısı;
+          }
+        );
+      }
+      return toplam;
     }
   }
 };
